@@ -228,7 +228,7 @@ func processContainer(
 				*port),
 			}
 
-			if  _, extraPort := containerDefinition.DockerLabels["	"]; extraPort {
+			if  _, extraPort := containerDefinition.DockerLabels["io.prometheus.scrapeExtraPort"]; extraPort {
 				if extraPortPassed {
 					extraPortNumber = container.NetworkBindings[1].HostPort
 					targetGroup.Targets = append(targetGroup.Targets, fmt.Sprintf(
