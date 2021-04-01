@@ -193,12 +193,17 @@ func processContainer(
 		return targetGroup
 	}
 	for _, containerDefinition := range taskDefinition.ContainerDefinitions {
+		var extraPortPassed = false
+		var extraPortNumber *int64
 		if *containerDefinition.Name == *container.Name {
 			if len(containerDefinition.PortMappings) == 0 {
 				return targetGroup
 			}
 			var port *int64
 			if *taskDefinition.NetworkMode == "bridge" {
+				if len(container.NetworkBindings) > 1 {
+					extraPortPassed = true
+				}
 				port = container.NetworkBindings[0].HostPort
 			} else if *taskDefinition.NetworkMode == "host" {
 				port = containerDefinition.PortMappings[0].HostPort
@@ -221,6 +226,16 @@ func processContainer(
 				"%s:%d",
 				*ec2Instance.PrivateIpAddress,
 				*port),
+			}
+
+			if  _, extraPort := containerDefinition.DockerLabels["	"]; extraPort {
+				if extraPortPassed {
+					extraPortNumber = container.NetworkBindings[1].HostPort
+					targetGroup.Targets = append(targetGroup.Targets, fmt.Sprintf(
+						"%s:%d",
+						*ec2Instance.PrivateIpAddress,
+						*extraPortNumber))
+				}
 			}
 		}
 	}
