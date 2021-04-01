@@ -15,7 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/defaults"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ecs"
-	awsService "github.com/okushchenko/prometheus-ecs-sd/aws"
+	awsService "github.com/kostya2011/prometheus-ecs-sd/aws"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/util/strutil"
 	"github.com/youtube/vitess/go/ioutil2"
